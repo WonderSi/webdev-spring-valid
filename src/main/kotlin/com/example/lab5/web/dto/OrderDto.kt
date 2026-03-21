@@ -2,10 +2,15 @@ package com.example.lab5.web.dto
 
 import com.example.lab5.domain.model.Order
 import com.example.lab5.domain.model.OrderStatus
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 import java.time.LocalDateTime
 
 data class OrderCreateRequest(
+    @field:NotNull(message = "userId is required")
     val userId: Long,
+
+    @field:NotEmpty(message = "Order must contain at least one dish")
     val dishIds: List<Long>
 )
 
