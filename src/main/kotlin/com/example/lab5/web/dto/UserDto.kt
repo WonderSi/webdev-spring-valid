@@ -8,15 +8,15 @@ import jakarta.validation.constraints.NotNull
 data class UserCreateRequest(
     @field:Email(message = "Invalid email format")
     @field:NotBlank(message = "Email must not be blank")
-    val email: String,
+    val email: String? = null,
 
     @field:NotNull(message = "First name is required")
     @field:NotBlank(message = "First name must not be blank")
-    val firstName: String,
+    val firstName: String? = null,
 
     @field:NotNull(message = "Last name is required")
     @field:NotBlank(message = "Last name must not be blank")
-    val lastName: String,
+    val lastName: String? = null,
 
     val isActive: Boolean = true
 )
@@ -24,17 +24,17 @@ data class UserCreateRequest(
 data class UserUpdateRequest(
     @field:Email(message = "Invalid email format")
     @field:NotBlank(message = "Email must not be blank")
-    val email: String,
+    val email: String? = null,
 
     @field:NotNull(message = "First name is required")
     @field:NotBlank(message = "First name must not be blank")
-    val firstName: String,
+    val firstName: String? = null,
 
     @field:NotNull(message = "Last name is required")
     @field:NotBlank(message = "Last name must not be blank")
-    val lastName: String,
+    val lastName: String? = null,
 
-    val isActive: Boolean
+    val isActive: Boolean = false
 )
 
 data class UserResponse(
