@@ -28,7 +28,7 @@ class RestaurantService(
     }
 
     fun create(restaurant: Restaurant): Restaurant {
-        if (restaurantJpaRepository.existsByName(restaurant.name)) {
+        if (restaurantJpaRepository.existsByNameIgnoreCase(restaurant.name)) {
             throw AlreadyExistsException("Restaurant '${restaurant.name}' already exists")
         }
         val created = restaurantRepositoryPort.save(restaurant)
@@ -39,6 +39,12 @@ class RestaurantService(
     fun update(id: Long, restaurant: Restaurant): Restaurant {
         restaurantRepositoryPort.findById(id)
             ?: throw NotFoundException("Restaurant with id=$id not found")
+
+        val existing = restaurantJpaRepository.findByNameIgnoreCase(restaurant.name)
+        if (existing != null && existing.id != id) {
+            throw AlreadyExistsException("Restaurant '${restaurant.name}' already exists")
+        }
+
         return restaurantRepositoryPort.update(restaurant.copy(id = id))
     }
 
