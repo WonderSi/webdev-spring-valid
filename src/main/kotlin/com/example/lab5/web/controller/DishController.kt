@@ -2,12 +2,15 @@ package com.example.lab5.web.controller
 
 import com.example.lab5.application.service.DishService
 import com.example.lab5.web.dto.*
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/dishes")
+@Validated
 class DishController(
     private val dishService: DishService
 ) {
@@ -22,7 +25,7 @@ class DishController(
         ResponseEntity.ok(dishService.findById(id).toResponse())
 
     @PostMapping
-    fun createDish(@RequestBody request: DishCreateRequest): ResponseEntity<DishResponse> {
+    fun createDish(@Valid @RequestBody request: DishCreateRequest): ResponseEntity<DishResponse> {
         val (dish, isCreated) = dishService.create(request.toDomain())
         return if (isCreated) {
             ResponseEntity.status(HttpStatus.CREATED).body(dish.toResponse())
@@ -34,7 +37,7 @@ class DishController(
     @PutMapping("/{id}")
     fun updateDish(
         @PathVariable id: Long,
-        @RequestBody request: DishUpdateRequest
+        @Valid @RequestBody request: DishUpdateRequest
     ): ResponseEntity<DishResponse> =
         ResponseEntity.ok(dishService.update(id, request.toDomain()).toResponse())
 

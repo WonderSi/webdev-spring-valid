@@ -3,12 +3,15 @@ package com.example.lab5.web.controller
 import com.example.lab5.application.service.OrderService
 import com.example.lab5.domain.model.OrderStatus
 import com.example.lab5.web.dto.*
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/orders")
+@Validated
 class OrderController(
     private val orderService: OrderService
 ) {
@@ -24,7 +27,7 @@ class OrderController(
         ResponseEntity.ok(orderService.findById(id).toResponse())
 
     @PostMapping
-    fun createOrder(@RequestBody request: OrderCreateRequest): ResponseEntity<OrderResponse> =
+    fun createOrder(@Valid @RequestBody request: OrderCreateRequest): ResponseEntity<OrderResponse> =
         ResponseEntity.status(HttpStatus.CREATED)
             .body(orderService.create(request.userId, request.dishIds).toResponse())
 
