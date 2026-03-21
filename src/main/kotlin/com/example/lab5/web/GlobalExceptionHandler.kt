@@ -5,6 +5,7 @@ import com.example.lab5.web.dto.ErrorResponse
 import com.example.lab5.web.dto.ValidationErrorResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.ConstraintViolationException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -63,5 +64,13 @@ class GlobalExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse(500, "Internal server error"))
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleDataIntegrity(e: DataIntegrityViolationException): ResponseEntity<ErrorResponse> {
+        logger.warn { "Data integrity violation: ${e.message}" }
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(ErrorResponse(409, "Resource already exists"))
     }
 }
