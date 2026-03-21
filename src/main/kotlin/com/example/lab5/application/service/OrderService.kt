@@ -26,7 +26,7 @@ class OrderService(
     fun findById(id: Long): Order {
         logger.info { "Fetching order id=$id" }
         return orderRepositoryPort.findById(id)
-            ?: throw NoSuchElementException("Order with id=$id not found")
+            ?: throw NotFoundException("Order with id=$id not found")
     }
 
     fun create(userId: Long, dishIds: List<Long>): Order {
