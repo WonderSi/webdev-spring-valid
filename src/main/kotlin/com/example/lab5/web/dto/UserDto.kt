@@ -54,15 +54,15 @@ fun User.toResponse() = UserResponse(
 )
 
 fun UserCreateRequest.toDomain() = User(
-    email = email,
-    firstName = firstName,
-    lastName = lastName,
+    email = email?: "",
+    firstName = firstName?: "",
+    lastName = lastName?: "",
     isActive = isActive
 )
 
 fun UserUpdateRequest.toDomain() = User(
-    email = email,
-    firstName = firstName,
-    lastName = lastName,
+    email = email?: "",
+    firstName = firstName?: "",
+    lastName = lastName?: "",
     isActive = isActive
 )
