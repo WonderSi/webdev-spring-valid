@@ -23,6 +23,7 @@ class GlobalExceptionHandler {
             is NotFoundException          -> HttpStatus.NOT_FOUND    // 404
             is AlreadyExistsException     -> HttpStatus.CONFLICT     // 409
             is InvalidOrderStateException -> HttpStatus.BAD_REQUEST  // 400
+            is BadRequestException        -> HttpStatus.BAD_REQUEST
         }
         logger.warn { "${e::class.simpleName}: ${e.message}" }
         return ResponseEntity
