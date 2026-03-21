@@ -1,18 +1,34 @@
 package com.example.lab5.web.dto
 
 import com.example.lab5.domain.model.User
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
 
 data class UserCreateRequest(
+    @field:Email(message = "Invalid email format")
+    @field:NotBlank(message = "Email must not be blank")
     val email: String,
+
+    @field:NotBlank(message = "First name must not be blank")
     val firstName: String,
+
+    @field:NotBlank(message = "Last name must not be blank")
     val lastName: String,
+
     val isActive: Boolean = true
 )
 
 data class UserUpdateRequest(
+    @field:Email(message = "Invalid email format")
+    @field:NotBlank(message = "Email must not be blank")
     val email: String,
+
+    @field:NotBlank(message = "First name must not be blank")
     val firstName: String,
+
+    @field:NotBlank(message = "Last name must not be blank")
     val lastName: String,
+
     val isActive: Boolean
 )
 

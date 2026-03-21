@@ -2,12 +2,15 @@ package com.example.lab5.web.controller
 
 import com.example.lab5.application.service.UserService
 import com.example.lab5.web.dto.*
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Validated
 class UserController(
     private val userService: UserService
 ) {
@@ -20,7 +23,7 @@ class UserController(
         ResponseEntity.ok(userService.findById(id).toResponse())
 
     @PostMapping
-    fun createUser(@RequestBody request: UserCreateRequest): ResponseEntity<UserResponse> {
+    fun createUser(@Valid @RequestBody request: UserCreateRequest): ResponseEntity<UserResponse> {
         val (user, isCreated) = userService.create(request.toDomain())
         return if (isCreated) {
             ResponseEntity.status(HttpStatus.CREATED).body(user.toResponse())
@@ -32,7 +35,7 @@ class UserController(
     @PutMapping("/{id}")
     fun updateUser(
         @PathVariable id: Long,
-        @RequestBody request: UserUpdateRequest
+        @Valid @RequestBody request: UserUpdateRequest
     ): ResponseEntity<UserResponse> =
         ResponseEntity.ok(userService.update(id, request.toDomain()).toResponse())
 
