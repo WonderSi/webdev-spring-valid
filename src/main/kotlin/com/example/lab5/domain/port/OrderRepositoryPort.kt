@@ -8,4 +8,5 @@ interface OrderRepositoryPort {
     fun findById(id: Long): Order?
     fun save(order: Order): Order
     fun update(order: Order): Order
+    fun delete(id: Long)
 }

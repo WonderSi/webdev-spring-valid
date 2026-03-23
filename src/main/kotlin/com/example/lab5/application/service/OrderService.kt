@@ -54,6 +54,13 @@ class OrderService(
         logger.info { "Created order id=${created.id}, userId=$userId" }
         return created
     }
+    
+    fun delete(id: Long) {
+        logger.info { "Deleting order id=$id" }
+        findById(id)
+        orderRepositoryPort.delete(id)
+        logger.info { "Deleted order id=$id" }
+    }
 
     fun updateStatus(id: Long, status: OrderStatus): Order {
         val order = findById(id)

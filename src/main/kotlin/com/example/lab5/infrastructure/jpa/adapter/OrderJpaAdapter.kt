@@ -58,6 +58,10 @@ class OrderJpaAdapter(
         existing.status = order.status
         return orderJpaRepository.save(existing).toDomain()
     }
+
+    override fun delete(id: Long) {
+        orderJpaRepository.deleteById(id)
+    }
 }
 
 fun OrderEntity.toDomain() = Order(

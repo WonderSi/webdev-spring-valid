@@ -35,6 +35,12 @@ class OrderController(
         return ResponseEntity.status(HttpStatus.CREATED).body(order.toResponse())
     }
 
+    @DeleteMapping("/{id}")
+    fun deleteOrder(@PathVariable id: Long): ResponseEntity<Void> {
+        orderService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
+
     @PatchMapping("/{id}/status")
     fun updateOrderStatus(
         @PathVariable id: Long,
