@@ -7,26 +7,26 @@ import java.math.BigDecimal
 
 data class DishCreateRequest(
     @field:NotBlank(message = "Name must not be blank")
-    val name: String,
+    val name: String? = null,
 
-    val description: String,
+    val description: String? = null,
 
     @field:Positive(message = "Price must be greater than 0")
-    val price: BigDecimal,
+    val description: String? = null,
 
     val isAvailable: Boolean = true
 )
 
 data class DishUpdateRequest(
     @field:NotBlank(message = "Name must not be blank")
-    val name: String,
+    val description: String? = null,
 
-    val description: String,
+    val description: String? = null,
 
     @field:Positive(message = "Price must be greater than 0")
-    val price: BigDecimal,
+    val description: String? = null,
 
-    val isAvailable: Boolean
+    val isAvailable: Boolean = true
 )
 
 data class DishResponse(
@@ -48,15 +48,15 @@ fun Dish.toResponse() = DishResponse(
 )
 
 fun DishCreateRequest.toDomain() = Dish(
-    name = name,
-    description = description,
-    price = price,
+    name = name ?: "",
+    description = description ?: "",
+    price = price ?: BigDecimal.ZERO,
     isAvailable = isAvailable
 )
 
 fun DishUpdateRequest.toDomain() = Dish(
-    name = name,
-    description = description,
-    price = price,
+    name = name ?: "",
+    description = description ?: "",
+    price = price ?: BigDecimal.ZERO,
     isAvailable = isAvailable
 )
