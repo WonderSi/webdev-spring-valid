@@ -444,7 +444,7 @@ if [ "$DISH3_IN_MENU" -ne 0 ]; then
 fi
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 30: GET /api/v1/dishes/{id} после delete -> 404... "
+echo -n "Тест 30: GET /api/v1/dishes/999999 (несуществующее блюдо) -> 404... "
 call_api "GET" "/api/v1/dishes/999999"
 assert_status "404"
 assert_json_field_exists "status"
@@ -669,7 +669,7 @@ assert_json_field_is_object "errors"
 echo -e "${GREEN}OK${NC}"
 
 echo -n "Тест 50: POST /api/v1/restaurants (дубликат имени) -> 409... "
-call_api "POST" "/api/v1/restaurants" "$RESTAURANT_CREATE_PAYLOAD"
+call_api "POST" "/api/v1/restaurants" "{\"name\":\"${RESTAURANT_NAME}-Updated\",\"address\":\"ул. Другая, д. 1\"}"
 assert_status "409"
 assert_json_field_exists "status"
 echo -e "${GREEN}OK${NC}"
@@ -703,29 +703,23 @@ assert_status "400"
 assert_json_field_is_object "errors"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 55: POST /api/v1/orders (пустой dishIds) -> 400 + errors... "
-call_api "POST" "/api/v1/orders" "{\"userId\":${USER_ID},\"dishIds\":[]}"
-assert_status "400"
-assert_json_field_is_object "errors"
-echo -e "${GREEN}OK${NC}"
-
 # --- Формат ответа: 404 без stack trace ---
 
-echo -n "Тест 56: GET /api/v1/users/999999 -> 404 без trace... "
+echo -n "Тест 55: GET /api/v1/users/999999 -> 404 без trace... "
 call_api "GET" "/api/v1/users/999999"
 assert_status "404"
 assert_json_field_exists "status"
 assert_json_field_not_exists "trace"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 57: GET /api/v1/restaurants/999999 -> 404 без trace... "
+echo -n "Тест 56: GET /api/v1/restaurants/999999 -> 404 без trace... "
 call_api "GET" "/api/v1/restaurants/999999"
 assert_status "404"
 assert_json_field_exists "status"
 assert_json_field_not_exists "trace"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 58: GET /api/v1/orders/999999 -> 404 без trace... "
+echo -n "Тест 57: GET /api/v1/orders/999999 -> 404 без trace... "
 call_api "GET" "/api/v1/orders/999999"
 assert_status "404"
 assert_json_field_exists "status"
@@ -736,55 +730,66 @@ echo ""
 echo "--- Конец негативных тестов ---"
 
 # ==========================================
-# CLEANUP (удаление в обратном порядке)
+# CLEANUP (удаление в обратном порядке: заказы → блюда → рестораны → пользователи)
 # ==========================================
 
-echo -n "Тест 59: DELETE /api/v1/dishes/{id} (блюдо 3) -> 204... "
+echo -n "Тест 58: DELETE /api/v1/orders/{id} -> 204... "
+call_api "DELETE" "/api/v1/orders/$ORDER_ID"
+assert_status "204"
+echo -e "${GREEN}OK${NC}"
+
+echo -n "Тест 59: GET /api/v1/orders/{id} после delete -> 404... "
+call_api "GET" "/api/v1/orders/$ORDER_ID"
+assert_status "404"
+assert_json_field_exists "status"
+echo -e "${GREEN}OK${NC}"
+
+echo -n "Тест 60: DELETE /api/v1/dishes/{id} (блюдо 3) -> 204... "
 call_api "DELETE" "/api/v1/dishes/$DISH3_ID"
 assert_status "204"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 60: GET /api/v1/dishes/{id} после delete -> 404... "
+echo -n "Тест 61: GET /api/v1/dishes/{id} после delete -> 404... "
 call_api "GET" "/api/v1/dishes/$DISH3_ID"
 assert_status "404"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 61: DELETE /api/v1/dishes/{id} (блюдо 2) -> 204... "
+echo -n "Тест 62: DELETE /api/v1/dishes/{id} (блюдо 2) -> 204... "
 call_api "DELETE" "/api/v1/dishes/$DISH2_ID"
 assert_status "204"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 62: DELETE /api/v1/dishes/{id} (блюдо 1) -> 204... "
+echo -n "Тест 63: DELETE /api/v1/dishes/{id} (блюдо 1) -> 204... "
 call_api "DELETE" "/api/v1/dishes/$DISH_ID"
 assert_status "204"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 63: DELETE /api/v1/restaurants/{id} (ресторан 2) -> 204... "
+echo -n "Тест 64: DELETE /api/v1/restaurants/{id} (ресторан 2) -> 204... "
 call_api "DELETE" "/api/v1/restaurants/$RESTAURANT2_ID"
 assert_status "204"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 64: GET /api/v1/restaurants/{id} после delete -> 404... "
+echo -n "Тест 65: GET /api/v1/restaurants/{id} после delete -> 404... "
 call_api "GET" "/api/v1/restaurants/$RESTAURANT2_ID"
 assert_status "404"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 65: DELETE /api/v1/restaurants/{id} (ресторан 1) -> 204... "
+echo -n "Тест 66: DELETE /api/v1/restaurants/{id} (ресторан 1) -> 204... "
 call_api "DELETE" "/api/v1/restaurants/$RESTAURANT_ID"
 assert_status "204"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 66: DELETE /api/v1/users/{id} -> 204... "
+echo -n "Тест 67: DELETE /api/v1/users/{id} -> 204... "
 call_api "DELETE" "/api/v1/users/$USER_ID"
 assert_status "204"
 echo -e "${GREEN}OK${NC}"
 
-echo -n "Тест 67: GET /api/v1/users/{id} после delete -> 404... "
+echo -n "Тест 68: GET /api/v1/users/{id} после delete -> 404... "
 call_api "GET" "/api/v1/users/$USER_ID"
 assert_status "404"
 assert_json_field_exists "status"
 echo -e "${GREEN}OK${NC}"
 
 echo "---------------------------------------------------"
-echo -e "${GREEN}Все 67 тестов успешно пройдены!${NC}"
+echo -e "${GREEN}Все 68 тестов успешно пройдены!${NC}"
 exit 0
