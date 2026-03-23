@@ -35,7 +35,6 @@ fun Order.toResponse() = OrderResponse(
 )
 
 fun OrderCreateRequest.toDomain() = Order(
-    userId = userId!!,  // @NotNull гарантирует, что здесь не null
-    dishIds = dishIds ?: emptyList(),
+    userId = userId!!,
     status = OrderStatus.PENDING
 )

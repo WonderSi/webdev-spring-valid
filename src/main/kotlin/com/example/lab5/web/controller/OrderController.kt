@@ -28,7 +28,10 @@ class OrderController(
 
     @PostMapping
     fun createOrder(@Valid @RequestBody request: OrderCreateRequest): ResponseEntity<OrderResponse> {
-        val order = orderService.create(request.toDomain())
+        val order = orderService.create(
+            userId = request.userId!!,
+            dishIds = request.dishIds ?: emptyList()
+        )
         return ResponseEntity.status(HttpStatus.CREATED).body(order.toResponse())
     }
 
@@ -36,6 +39,11 @@ class OrderController(
     fun updateOrderStatus(
         @PathVariable id: Long,
         @RequestBody request: OrderStatusUpdateRequest
-    ): ResponseEntity<OrderResponse> =
-        ResponseEntity.ok(orderService.updateStatus(id, request.status).toResponse())
+    ): ResponseEntity<OrderResponse> {
+        val status = request.status 
+            ?: throw IllegalArgumentException("Status is required")
+        
+        val updated = orderService.updateStatus(id, status)
+        return ResponseEntity.ok(updated.toResponse())
+    }
 }
