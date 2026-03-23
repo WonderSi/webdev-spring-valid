@@ -3,7 +3,6 @@ package com.example.lab5.web.dto
 import com.example.lab5.domain.model.User
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
-// Импорт NotNull удален
 
 data class UserCreateRequest(
     @field:Email(message = "Invalid email format")

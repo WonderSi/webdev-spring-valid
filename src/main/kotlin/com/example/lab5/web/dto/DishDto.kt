@@ -12,19 +12,19 @@ data class DishCreateRequest(
     val description: String? = null,
 
     @field:Positive(message = "Price must be greater than 0")
-    val description: String? = null,
+    val price: BigDecimal? = null,
 
     val isAvailable: Boolean = true
 )
 
 data class DishUpdateRequest(
     @field:NotBlank(message = "Name must not be blank")
-    val description: String? = null,
+    val name: String? = null,
 
     val description: String? = null,
 
     @field:Positive(message = "Price must be greater than 0")
-    val description: String? = null,
+    val price: BigDecimal? = null,
 
     val isAvailable: Boolean = true
 )
