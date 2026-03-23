@@ -27,9 +27,10 @@ class OrderController(
         ResponseEntity.ok(orderService.findById(id).toResponse())
 
     @PostMapping
-    fun createOrder(@Valid @RequestBody request: OrderCreateRequest): ResponseEntity<OrderResponse> =
-        ResponseEntity.status(HttpStatus.CREATED)
-            .body(orderService.create(request.userId, request.dishIds).toResponse())
+    fun createOrder(@Valid @RequestBody request: OrderCreateRequest): ResponseEntity<OrderResponse> {
+        val order = orderService.create(request.toDomain())
+        return ResponseEntity.status(HttpStatus.CREATED).body(order.toResponse())
+    }
 
     @PatchMapping("/{id}/status")
     fun updateOrderStatus(

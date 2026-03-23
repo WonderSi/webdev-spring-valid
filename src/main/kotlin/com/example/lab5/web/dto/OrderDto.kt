@@ -33,3 +33,9 @@ fun Order.toResponse() = OrderResponse(
     createdAt = createdAt,
     dishes = dishes.map { it.toResponse() }
 )
+
+fun OrderCreateRequest.toDomain() = Order(
+    userId = userId!!,  // @NotNull гарантирует, что здесь не null
+    dishIds = dishIds ?: emptyList(),
+    status = OrderStatus.PENDING
+)
